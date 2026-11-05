@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07356d" />
+  <title>VitalStream | Monitoramento de pacientes</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <section id="loginView" class="login-screen">
+    <div class="login-decoration pulse-line"></div>
+    <form id="loginForm" class="login-card">
+      <div class="brand brand-login"><span class="brand-mark">♥</span><span>VitalStream</span></div>
+      <label class="field with-icon"><span>♙</span><input id="loginUser" placeholder="Login" autocomplete="username" required value="equipe.upa"></label>
+      <label class="field with-icon"><span>▣</span><input id="loginPassword" type="password" placeholder="Senha" autocomplete="current-password" required value="vital123"><button type="button" id="togglePassword" class="eye" aria-label="Mostrar senha">◉</button></label>
+      <button type="button" class="forgot" id="forgotPassword">Esqueci minha senha</button>
+      <button class="primary-btn login-submit" type="submit">Entrar</button>
+      <p class="login-hint">Demonstração: use os dados preenchidos ou qualquer login e senha.</p>
+    </form>
+  </section>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">♥</span><span>VitalStream</span></div>
+      <nav class="side-nav" aria-label="Navegação principal">
+        <button class="nav-item active" data-page="dashboard"><span class="nav-icon">▦</span><span>Dashboard</span></button>
+        <button class="nav-item" data-page="patients"><span class="nav-icon">♟</span><span>Pacientes</span></button>
+        <button class="nav-item" data-page="register"><span class="nav-icon">♟＋</span><span>Cadastro de Paciente</span></button>
+      </nav>
+      <button class="logout-btn" id="logoutBtn"><span>⇥</span> <span>Sair</span></button>
+    </aside>
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menu">☰</button>
+        <div><p class="eyebrow">SISTEMA DE MONITORAMENTO</p><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="top-actions">
+          <button class="icon-button notification-button" id="notificationsBtn" aria-label="Notificações">♧<i></i></button>
+          <button class="profile-button" id="profileBtn" aria-label="Perfil">●</button>
+        </div>
+      </header>
+      <div id="notificationPanel" class="notification-panel hidden">
+        <strong>Notificações</strong><p><span class="dot red"></span> Maria da Silva — frequência cardíaca baixa.</p><p><span class="dot amber"></span> João Pereira — atenção necessária.</p>
+      </div>
+      <section id="dashboardPage" class="page">
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-symbol blue">◉</div><div><strong id="activeWristbands">126</strong><span>Pulseiras ativas</span></div></article>
+          <article class="stat-card"><div class="stat-symbol green">♟♟</div><div><strong id="monitoredCount">126</strong><span>Pacientes monitorados</span></div></article>
+          <article class="stat-card"><div class="stat-symbol red">♟</div><div><strong id="alertCount">15</strong><span>Alertas ativos</span></div></article>
+        </div>
+        <div class="panel overview-panel">
+          <div class="panel-heading"><div><h2>Panorama dos pacientes</h2><p>Distribuição por situação de monitoramento</p></div><span class="live-tag"><i></i> Dados simulados</span></div>
+          <div class="overview-content">
+            <div class="donut-wrap"><div class="donut-chart"><div class="donut-hole"><strong id="totalPatients">100</strong><span>pacientes</span></div></div></div>
+            <div class="legend">
+              <div><span class="legend-dot green-bg"></span><span>Normal</span><strong id="normalCount">70</strong></div>
+              <div><span class="legend-dot amber-bg"></span><span>Atenção</span><strong id="attentionCount">20</strong></div>
+              <div><span class="legend-dot red-bg"></span><span>Perigo</span><strong id="dangerCount">10</strong></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel recent-panel">
+          <div class="panel-heading"><div><h2>Pacientes que precisam de atenção</h2><p>Acompanhe os registros com situação prioritária</p></div><button class="text-btn" data-go="patients">Ver todos →</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Paciente</th><th>Idade</th><th>Frequência cardíaca</th><th>Situação</th><th></th></tr></thead><tbody id="priorityRows"></tbody></table></div>
+        </div>
+      </section>
+
+      <section id="patientsPage" class="page hidden">
+        <div class="panel">
+          <div class="panel-heading patients-heading"><div><h2>Pacientes cadastrados</h2><p>Consulte e acompanhe os pacientes monitorados</p></div><button class="primary-btn compact" data-go="register">＋ Novo paciente</button></div>
+          <div class="toolbar"><label class="search-box">⌕ <input id="patientSearch" placeholder="Buscar por nome ou CPF..."></label><select id="statusFilter" aria-label="Filtrar por situação"><option value="all">Todas as situações</option><option value="Normal">Normal</option><option value="Atenção">Atenção</option><option value="Perigo">Perigo</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>Paciente</th><th>Idade</th><th>Frequência cardíaca</th><th>Pulseira</th><th>Situação</th><th>Ação</th></tr></thead><tbody id="patientRows"></tbody></table></div>
+          <p class="table-foot" id="patientResultCount"></p>
+        </div>
+      </section>
+
+      <section id="registerPage" class="page hidden">
+        <form id="patientForm" class="panel form-panel">
+          <div class="panel-heading"><div><h2>Cadastro do paciente</h2><p>Preencha os dados para incluir um paciente na demonstração</p></div></div>
+          <div class="form-grid">
+            <label>Nome completo<input name="name" placeholder="Nome do paciente" required></label>
+            <label>CPF<input name="cpf" placeholder="000.000.000-00" maxlength="14" required></label>
+            <label>Idade<input name="age" type="number" min="0" max="120" placeholder="Idade" required></label>
+            <label>Telefone<input name="phone" placeholder="(00) 00000-0000"></label>
+            <label>E-mail<input name="email" type="email" placeholder="email@exemplo.com"></label>
+            <label>Telefone de emergência<input name="emergency" placeholder="(00) 00000-0000"></label>
+          </div>
+          <div class="form-actions"><button type="reset" class="secondary-btn">Limpar</button><button class="primary-btn" type="submit">Salvar paciente</button></div>
+        </form>
+      </section>
+
+      <section id="detailsPage" class="page hidden">
+        <div class="back-row"><button class="text-btn" id="backToPatients">← Voltar para pacientes</button></div>
+        <div id="detailContent"></div>
+      </section>
+    </main>
+    <div id="toast" class="toast" role="status"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
