@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vitalstream-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vitalstream
+      POSTGRES_PASSWORD: vitalstream
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/sql/00-create-databases.sql:/docker-entrypoint-initdb.d/00-create-databases.sql:ro
+      - ./backend/sql/01-patients.sql:/docker-entrypoint-initdb.d/01-patients.sql:ro
+      - ./backend/sql/02-vitals.sql:/docker-entrypoint-initdb.d/02-vitals.sql:ro
+      - ./backend/sql/03-seed.sql:/docker-entrypoint-initdb.d/03-seed.sql:ro
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: vitalstream-mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+volumes:
+  postgres_data:
+  mosquitto_data:
+  mosquitto_log:
